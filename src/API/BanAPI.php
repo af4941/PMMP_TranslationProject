@@ -94,7 +94,7 @@ class BanAPI{
 				}
 				return;
 				break;
-			case "console.command"://Checks if a command is allowed with the current user permissions.
+			case "console.command"://현재 부여된 플레이어의 OP권한의 유무에 따라 커맨드 사용 권한을 정의합니다.
 				if(isset($this->cmdWhitelist[$data["cmd"]])){
 					return;
 				}
@@ -191,22 +191,22 @@ class BanAPI{
 						$this->whitelist = new Config(DATA_PATH."white-list.txt", CONFIG_LIST);
 						break;
 					case "list":
-						$output .= "White-list: ".implode(", ", $this->whitelist->getAll(true))."\n";
+						$output .= "화이트리스트: ".implode(", ", $this->whitelist->getAll(true))."\n";
 						break;
 					case "on":
 					case "true":
 					case "1":
-						$output .= "White-list turned on\n";
+						$output .= "화이트리스트가 활성화되었습니다\n";
 						$this->server->api->setProperty("white-list", true);
 						break;
 					case "off":
 					case "false":
 					case "0":
-						$output .= "White-list turned off\n";
+						$output .= "화이트리스트가 비활성화되었습니다\n";
 						$this->server->api->setProperty("white-list", false);
 						break;
 					default:
-						$output .= "Usage: /whitelist <on|off|list|add|remove|reload> [username]\n";
+						$output .= "사용법: /whitelist <on|off|list|add|remove|reload> [닉네임]\n";
 						break;
 				}
 				break;
@@ -218,7 +218,7 @@ class BanAPI{
 						$ip = strtolower($params[0]);
 						$this->bannedIPs->remove($ip);
 						$this->bannedIPs->save();
-						$output .= "IP \"$ip\" removed from ban list\n";
+						$output .= "IP \"$ip\"이 차단 목록에서 제외되었습니다.\n";
 						break;
 					case "add":
 					case "ban":
@@ -230,16 +230,16 @@ class BanAPI{
 						}
 						$this->bannedIPs->set($ip);
 						$this->bannedIPs->save();
-						$output .= "IP \"$ip\" added to ban list\n";
+						$output .= "IP \"$ip\"이 차단 목록에 추가되었습니다.\n";
 						break;
 					case "reload":
 						$this->bannedIPs = new Config(DATA_PATH."banned-ips.txt", CONFIG_LIST);
 						break;
 					case "list":
-						$output .= "IP ban list: ".implode(", ", $this->bannedIPs->getAll(true))."\n";
+						$output .= "IP 차단 목록: ".implode(", ", $this->bannedIPs->getAll(true))."\n";
 						break;
 					default:
-						$output .= "Usage: /banip <add|remove|list|reload> [IP|player]\n";
+						$output .= "사용법: /banip <add|remove|list|reload> [IP|닉네임]\n";
 						break;
 				}
 				break;
@@ -251,7 +251,7 @@ class BanAPI{
 						$user = strtolower($params[0]);
 						$this->banned->remove($user);
 						$this->banned->save();
-						$output .= "Player \"$user\" removed from ban list\n";
+						$output .= "플레이어 \"$user\"님이 차단 목록에서 제외되었습니다.\n";
 						break;
 					case "add":
 					case "ban":
@@ -260,24 +260,24 @@ class BanAPI{
 						$this->banned->save();
 						$player = $this->server->api->player->get($user);
 						if($player !== false){
-							$player->close("You have been banned");
+							$player->close("당신은 차단되었습니다.");
 						}
 						if($issuer instanceof Player){
-							$this->server->api->chat->broadcast($user." has been banned by ".$issuer->username."\n");
+							$this->server->api->chat->broadcast($user."님이 ".$issuer->username."님에 의해 차단되었습니다.\n");
 						}else{
-							$this->server->api->chat->broadcast($user." has been banned\n");
+							$this->server->api->chat->broadcast($user."님이 차단되었습니다.\n");
 						}
 						$this->kick($user, "Banned");
-						$output .= "Player \"$user\" added to ban list\n";
+						$output .= "플레이어 \"$user\"차단 목록에 추가되었습니다.\n";
 						break;
 					case "reload":
 						$this->banned = new Config(DATA_PATH."banned.txt", CONFIG_LIST);
 						break;
 					case "list":
-						$output .= "Ban list: ".implode(", ", $this->banned->getAll(true))."\n";
+						$output .= "차단 리스트: ".implode(", ", $this->banned->getAll(true))."\n";
 						break;
 					default:
-						$output .= "Usage: /ban <add|remove|list|reload> [username]\n";
+						$output .= "사용법: /ban <add|remove|list|reload> [닉네임]\n";
 						break;
 				}
 				break;
