@@ -23,6 +23,8 @@ the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 
+번역: MCPE KOREA
+
 */
 
 class BanAPI{
@@ -31,7 +33,7 @@ class BanAPI{
 	private $banned;
 	private $ops;
 	private $bannedIPs;
-	private $cmdWL = array();//Command WhiteList
+	private $cmdWL = array();//커맨드 화이트리스트
 	function __construct(){
 		$this->server = ServerAPI::request();
 	}
@@ -58,11 +60,11 @@ class BanAPI{
 		$this->server->addHandler("player.flying", array($this, "permissionsCheck"), 1);//Flying Event
 	}
 	
-	public function cmdWhitelist($cmd){//Whitelists a CMD so everyone can issue it - Even non OPs.
+	public function cmdWhitelist($cmd){//OP가 아닌 사람들도 쓸 수 있게 명령어 화이트리스트를 생성합니다.
 		$this->cmdWhitelist[strtolower(trim($cmd))] = true;
 	}
 	
-	public function isOp($username){//Is a player op?
+	public function isOp($username){//플레이어가 OP권한이 있는가?
 		$username = strtolower($username);
 		if($this->server->api->dhandle("op.check", $username) === true){
 			return true;
@@ -74,13 +76,13 @@ class BanAPI{
 	
 	public function permissionsCheck($data, $event){
 		switch($event){
-			case "player.flying"://OPs can fly around the server.
+			case "player.flying"://OP권한이 있으면 서버에서 날 수 있습니다.
 				if($this->isOp($data->iusername)){
 					return true;
 				}
 				break;
 			case "player.block.break":
-			case "player.block.place"://Spawn protection detection. Allows OPs to place/break blocks in the spawn area.
+			case "player.block.place"://스폰 지역 보호. OP만 스폰 지역에서 블럭을 놓고 부술 수 있습니다.
 				if(!$this->isOp($data["player"]->iusername)){
 					$t = new Vector2($data["target"]->x, $data["target"]->z);
 					$s = new Vector2($this->server->spawn->x, $this->server->spawn->z);
