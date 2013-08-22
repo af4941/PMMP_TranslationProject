@@ -22,6 +22,8 @@ it under the terms of the GNU Lesser General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
+이 프로그램은 자유 소프트웨어입니다: 당신은 LGPL 라이센스 3 또는 최신 버전 하에서 수정하거나 (또는 수정하지 않고 )이 프로그램을 재배포할 수 있습니다.
+
 
 번역: MCPE KOREA
 
@@ -116,7 +118,7 @@ class BanAPI{
 				$target = strtolower(array_shift($params));
 				$player = $this->server->api->player->get($target);
 				if(!($player instanceof Player)){
-					$output .= "Player not connected.\n";
+					$output .= "플레이어가 연결되어 있지 않습니다.\n";
 					break;
 				}
 				$this->server->api->console->run(implode(" ", $params), $player);
@@ -128,13 +130,13 @@ class BanAPI{
 				if(!($player instanceof Player)){
 					$this->ops->set($user);
 					$this->ops->save($user);
-					$output .= $user." is now op\n";
+					$output .= $user."님은 이제 OP입니다.\n";
 					break;
 				}
 				$this->ops->set($player->iusername);
 				$this->ops->save();
-				$output .= $player->iusername." is now op\n";
-				$this->server->api->chat->sendTo(false, "You are now op.", $player->iusername);
+				$output .= $player->iusername."님은 이제 OP입니다\n";
+				$this->server->api->chat->sendTo(false, "당신은 이제 OP입니다.", $player->iusername);
 				break;
 			case "deop":
 				$user = strtolower($params[0]);
@@ -142,13 +144,13 @@ class BanAPI{
 				if(!($player instanceof Player)){
 					$this->ops->set($user, false);
 					$this->ops->save($user);
-					$output .= $user." is no longer op\n";
+					$output .= $user."님은 이제 OP가 아닙니다.\n";
 					break;
 				}
 				$this->ops->remove($player->iusername);
 				$this->ops->save();
-				$output .= $player->iusername." is not longer op\n";
-				$this->server->api->chat->sendTo(false, "You are no longer op.", $player->iusername);
+				$output .= $player->iusername."님은 이제 OP가 아닙니다.\n";
+				$this->server->api->chat->sendTo(false, "당신은 이제 OP가 아닙니다.", $player->iusername);
 				break;
 			case "kick":
 				if(!isset($params[0])){
@@ -157,15 +159,15 @@ class BanAPI{
 					$name = strtolower(array_shift($params));
 					$player = $this->server->api->player->get($name);
 					if($player === false){
-						$output .= "Player \"".$name."\" does not exist\n";
+						$output .= "플레이어 \"".$name."\"님은 존재하지 않는 이름입니다.\n";
 					}else{
 						$reason = implode(" ", $params);
-						$reason = $reason == "" ? "No reason":$reason;
-						$player->close("You have been kicked: ".$reason);
+						$reason = $reason == "" ? "이유 없음":$reason;
+						$player->close("당신은 서버에서 다음의 이유로 강퇴당했습니다: ".$reason);
 						if($issuer instanceof Player){
-							$this->server->api->chat->broadcast($player->username." has been kicked by ".$issuer->username.": $reason\n");
+							$this->server->api->chat->broadcast($player->username."님은  ".$issuer->username."님에 의해 다음의 이유로 강퇴당했습니다: $reason\n");
 						}else{
-							$this->server->api->chat->broadcast($player->username." has been kicked: $reason\n");
+							$this->server->api->chat->broadcast($player->username."님은 다음의 이유로 강퇴당했습니다: $reason\n");
 						}
 					}
 				}
@@ -177,13 +179,13 @@ class BanAPI{
 						$user = strtolower($params[0]);
 						$this->whitelist->remove($user);
 						$this->whitelist->save();
-						$output .= "Player \"$user\" removed from white-list\n";
+						$output .= "플레이어 \"$user\"님이 화이트리스트로부터 제외되었습니다.\n";
 						break;
 					case "add":
 						$user = strtolower($params[0]);
 						$this->whitelist->set($user);
 						$this->whitelist->save();
-						$output .= "Player \"$user\" added to white-list\n";
+						$output .= "플레이어 \"$user\"님이 화이트리스트에 추가되었습니다.\n";
 						break;
 					case "reload":
 						$this->whitelist = new Config(DATA_PATH."white-list.txt", CONFIG_LIST);
