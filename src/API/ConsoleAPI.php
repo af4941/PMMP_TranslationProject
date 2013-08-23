@@ -58,27 +58,27 @@ class ConsoleAPI{
 				switch($cmd){
 					case "defaultgamemode":
 						$gms = array(
-							"0" => SURVIVAL,
-							"survival" => SURVIVAL,
-							"s" => SURVIVAL,
-							"1" => CREATIVE,
-							"creative" => CREATIVE,
-							"c" => CREATIVE,
-							"2" => ADVENTURE,
-							"adventure" => ADVENTURE,
-							"a" => ADVENTURE,
-							"3" => VIEW,
+							"0" => SURVIVAL(서바이벌),
+							"survival" => SURVIVAL(서바이벌),
+							"s" => SURVIVAL(서바이벌),
+							"1" => CREATIVE(크리에이티브),
+							"creative" => CREATIVE(크리에이티브),
+							"c" => CREATIVE(크리에이티브),
+							"2" => ADVENTURE(어드벤처),
+							"adventure" => ADVENTURE(어드벤처),
+							"a" => ADVENTURE(어드벤처),
+							"3" => VIEW(뷰:),
 							"view" => VIEW,
 							"viewer" => VIEW,
 							"spectator" => VIEW,
 							"v" => VIEW,
 						);
 						if(!isset($gms[strtolower($params[0])])){
-							$output .= "Usage: /$cmd <mode>\n";
+							$output .= "사용법: /$cmd <모드>\n";
 							break;
 						}
 						$this->server->api->setProperty("gamemode", $gms[strtolower($params[0])]);
-						$output .= "Default Gamemode is now ".strtoupper($this->server->getGamemode()).".\n";
+						$output .= "이제 기본 게임모드는 ".strtoupper($this->server->getGamemode())."입니다.\n";
 						break;
 					case "status":
 						if(!($issuer instanceof Player) and $issuer === "console"){
