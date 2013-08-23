@@ -45,7 +45,7 @@ class ChatAPI{
 			case "say":
 				$s = implode(" ", $params);
 				if(trim($s) == ""){
-					$output .= "Usage: /say <message>\n";
+					$output .= "사용법: /say <메시지>\n";
 					break;
 				}
 				$sender = ($issuer instanceof Player) ? "Server":ucfirst($issuer);
@@ -65,7 +65,7 @@ class ChatAPI{
 				break;
 			case "tell":
 				if(!isset($params[0]) or !isset($params[1])){
-					$output .= "Usage: /$cmd <player> <message>\n";
+					$output .= "사용법: /$cmd <닉네임> <메시지>\n";
 					break;
 				}
 				if(!($issuer instanceof Player)){
