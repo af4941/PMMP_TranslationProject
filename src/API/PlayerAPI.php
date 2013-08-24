@@ -123,7 +123,7 @@ class PlayerAPI{
 		switch($cmd){
 			case "spawnpoint":
 				if(!($issuer instanceof Player)){					
-					$output .= "Please run this command in-game.\n";
+					$output .= "게임 내에서 이 명령어를 실행하셔야 합니다.\n";
 					break;
 				}
 
@@ -134,7 +134,7 @@ class PlayerAPI{
 				}
 				
 				if(!($target instanceof Player)){
-					$output .= "That player cannot be found.\n";
+					$output .= "알 수 없는 플레이어입니다.\n";
 					break;
 				}
 				
@@ -146,11 +146,11 @@ class PlayerAPI{
 				
 				$target->setSpawn($spawn);
 				
-				$output .= "Spawnpoint set correctly!\n";
+				$output .= "스폰 장소 지정이 이상합니다!\n";
 				break;
 			case "spawn":
 				if(!($issuer instanceof Player)){					
-					$output .= "Please run this command in-game.\n";
+					$output .= "게임 내에서 이 명령어를 실행해 주세요.\n";
 					break;
 				}
 				$spawn = $issuer->getSpawn();
@@ -158,7 +158,7 @@ class PlayerAPI{
 				break;
 			case "ping":
 				if(!($issuer instanceof Player)){					
-					$output .= "Please run this command in-game.\n";
+					$output .= "게임 내에서 이 명령어를 실행해 주세요.\n";
 					break;
 				}
 				$output .= "ping ".round($issuer->getLag(), 2)."ms, packet loss ".round($issuer->getPacketLoss() * 100, 2)."%, ".round($issuer->getBandwidth() / 1024, 2)." KB/s\n";
@@ -166,20 +166,20 @@ class PlayerAPI{
 			case "gamemode":
 				$player = false;
 				$gms = array(
-					"0" => SURVIVAL,
-					"survival" => SURVIVAL,
-					"s" => SURVIVAL,
-					"1" => CREATIVE,
-					"creative" => CREATIVE,
-					"c" => CREATIVE,
-					"2" => ADVENTURE,
-					"adventure" => ADVENTURE,
-					"a" => ADVENTURE,
-					"3" => VIEW,
-					"view" => VIEW,
-					"viewer" => VIEW,
-					"spectator" => VIEW,
-					"v" => VIEW,
+					"0" => SURVIVAL(서바이벌),
+					"survival" => SURVIVAL(서바이벌),
+					"s" => SURVIVAL(서바이벌),
+					"1" => CREATIVE(크리에이티브),
+					"creative" => CREATIVE(크리에이티브),
+					"c" => CREATIVE(크리에이티브),
+					"2" => ADVENTURE(어드벤처),
+					"adventure" => ADVENTURE(어드벤처),
+					"a" => ADVENTURE(어드벤처),
+					"3" => VIEW(뷰:),
+					"view" => VIEW(뷰:),
+					"viewer" => VIEW(뷰:),
+					"spectator" => VIEW(뷰:),
+					"v" => VIEW(뷰:),
 				);
 				if($issuer instanceof Player){
 					$player = $issuer;
@@ -188,11 +188,11 @@ class PlayerAPI{
 					$player = $this->server->api->player->get($params[1]);
 				}
 				if(!($player instanceof Player) or !isset($gms[strtolower($params[0])])){
-					$output .= "Usage: /$cmd <mode> [player]\n";
+					$output .= "사용법: /$cmd <게임 모드> [닉네임]\n";
 					break;
 				}
 				if($player->setGamemode($gms[strtolower($params[0])])){
-					$output .= "Gamemode of ".$player->username." changed to ".$player->getGamemode()."\n";
+					$output .= "".$player->username."님의 게임 모드가 ".$player->getGamemode()."으로 변경되었습니다.\n";
 				}
 				break;
 			case "tp":
@@ -204,13 +204,13 @@ class PlayerAPI{
 						$name = array_shift($params);
 						$target = implode(" ", $params);
 					}else{
-						$output .= "Usage: /$cmd [target player] <destination player>\n";
+						$output .= "사용법: /$cmd [텔레포트할 플레이어의 닉네임] <도착할 플레이어의 닉네임>\n";
 						break;
 					}
 					if($this->teleport($name, $target) !== false){
-						$output .= "\"$name\" teleported to \"$target\"\n";
+						$output .= "\"$name\"님이 \"$target\"님에게로 텔레포트했습니다. \n";
 					}else{
-						$output .= "Couldn't teleport.\n";
+						$output .= "텔레포트 실패.\n";
 					}
 				}else{
 					if(!isset($params[3]) and isset($params[2]) and isset($params[1]) and isset($params[0]) and ($issuer instanceof Player)){
@@ -224,13 +224,13 @@ class PlayerAPI{
 						$y = $params[2];
 						$z = $params[3];
 					}else{
-						$output .= "Usage: /$cmd [player] <x> <y> <z>\n";
+						$output .= "사용법: /$cmd [닉네임] <x> <y> <z>\n";
 						break;
 					}
 					if($this->tppos($name, $x, $y, $z)){
-						$output .= "\"$name\" teleported to ($x, $y, $z)\n";
+						$output .= "\"$name\"님이 ($x, $y, $z)좌표로 텔레포트했습니다.\n";
 					}else{
-						$output .= "Couldn't teleport.\n";
+						$output .= "텔레포트 실패.\n";
 					}
 				}
 				break;
@@ -243,13 +243,13 @@ class PlayerAPI{
 				}
 				if($player instanceof Player){
 					$player->entity->harm(1000, "console", true);
-					$player->sendChat("Ouch. That looks like it hurt.\n");
+					$player->sendChat("어이쿠, 좀 많이 아플 것 같은데요?\n");
 				}else{
-					$output .= "Usage: /$cmd [player]\n";
+					$output .= "사용법: /$cmd [닉네임]\n";
 				}
 				break;
 			case "list":
-				$output .= "There are ".count($this->server->clients)."/".$this->server->maxClients." players online:\n";
+				$output .= "".count($this->server->clients)."/".$this->server->maxClients."명의 사람들이 플레이 중입니다:\n";
 				if(count($this->server->clients) == 0){
 					break;
 				}
