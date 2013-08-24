@@ -85,24 +85,24 @@ class ConsoleAPI{
 							$this->server->debugInfo(true);
 						}
 						$info = $this->server->debugInfo();
-						$output .= "TPS: ".$info["tps"].", Memory usage: ".$info["memory_usage"]." (Peak ".$info["memory_peak_usage"].")\n";
+						$output .= "TPS: ".$info["tps"].", 메모리 사용량: ".$info["memory_usage"]." (최고 기록 ".$info["memory_peak_usage"].")\n";
 						break;
 					case "update-done":
 						$this->server->api->setProperty("last-update", time());
 						break;
 					case "stop":
 						$this->loop->stop = true;
-						$output .= "Stopping the server\n";
+						$output .= "서버를 멈추는 중...\n";
 						$this->server->close();
 						break;
 					case "difficulty":
 						$s = trim(array_shift($params));
 						if($s === "" or (((int) $s) > 3 and ((int) $s) < 0)){
-							$output .= "Usage: /difficulty <0|1|2|3>\n";
+							$output .= "사용법: /difficulty <0|1|2|3>\n";
 							break;
 						}
 						$this->server->api->setProperty("difficulty", (int) $s);
-						$output .= "Difficulty changed to ".$this->server->difficulty."\n";
+						$output .= "난이도가 ".$this->server->difficulty."으로 변경되었습니다.\n";
 						break;
 					case "?":
 						if($issuer !== "console" and $issuer !== "rcon"){
@@ -117,7 +117,7 @@ class ConsoleAPI{
 								or $this->server->api->dhandle("console.command", array("cmd" => $c, "parameters" => array(), "issuer" => $issuer, "alias" => false)) === false){
 									break;
 								}
-								$output .= "Usage: /$c ".$this->help[$c]."\n";
+								$output .= "사용법: /$c ".$this->help[$c]."\n";
 								break;
 							}
 						}
@@ -132,7 +132,7 @@ class ConsoleAPI{
 						
 						$max = ceil(count($cmds) / 5);
 						$page = (int) (isset($params[0]) ? min($max, max(1, intval($params[0]))):1);						
-						$output .= "- Showing help page $page of $max (/help <page>) -\n";
+						$output .= "- 도움말 $max 페이지 중 $page 번째 페이지(/help <page>) -\n";
 						$current = 1;
 						foreach($cmds as $c => $h){
 							$curpage = (int) ceil($current / 5);
@@ -145,7 +145,7 @@ class ConsoleAPI{
 						}
 						break;
 					default:
-						$output .= "Command doesn't exist! Use /help\n";
+						$output .= "명령어가 존재하지 않습니다! /help 명령어를 사용해보세요.\n";
 						break;
 				}
 		return $output;
@@ -178,7 +178,7 @@ class ConsoleAPI{
 				return $this->run($this->alias[$cmd] . ($params !== "" ? " " .$params:""), $issuer, $cmd);
 			}
 			if($issuer instanceof Player){
-				console("[DEBUG] \x1b[33m".$issuer->username."\x1b[0m issued server command: ".ltrim("$alias ")."/$cmd ".$params, true, true, 2);
+				console("[디버깅] \x1b[33m".$issuer->username."\x1b[0m 님이 명령어를 사용했습니다: ".ltrim("$alias ")."/$cmd ".$params, true, true, 2);
 			}else{
 				console("[DEBUG] \x1b[33m*".$issuer."\x1b[0m issued server command: ".ltrim("$alias ")."/$cmd ".$params, true, true, 2);
 			}
